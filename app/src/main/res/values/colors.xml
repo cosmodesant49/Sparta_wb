@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="white_grey">#EEEEF4</color>
+    <color name="grey">#BABBBD</color>
+    <color name="dark_grey">#7C606060</color>
+    <color name="red">#FF0000</color>
+    <color name="active_button_color">#FF6200EE</color>
+    <color name="default_button_color">#B0BEC5</color>
+    <color name="transparent">#00000000</color>
+    <color name="sapphire">#5191ba</color>
+    <color name="item">#6BFFFFFF</color>
+    <color name="gray">#1B2228</color>
+    <color name="gray_2">#2B373E</color>
+    <color name="blue_2">#087FB2</color>
+    <color name="dark_white">#c8cacb</color>
+    <color name="teal">#009688</color>
+    <color name="background_color">#FFFFFF</color>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryVariant">#1976D2</color>
+    <color name="colorSecondary">#009688</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorOnSecondary">#FFFFFF</color>
+    <color name="dark_grayish_blue">#2b373e</color>
+    <color name="light_blue">#0A84FF</color>
+    <color name="light_gray">#D2D2D2</color>
+    <color name="blue_grey">#252f35</color>
+    <color name="blue">#55AFF0</color>
+    <color name="bg_edit_txt">#2b373e</color>
+    <color name="edit_text_grey">#2b373e</color>
+    <color name="dark_blue">#1b2228</color>
+    <color name="grey_dark">#0A84FF</color>
+    <color name="gray3">#888D91</color>
+    <color name="button_color">#0A84FF</color>
+    <color name="true_gray">#515151</color>
+    <color name="checked_color">#0A84FF</color>
+    <color name="unchecked_color">#FFFFFF</color>
+    <color name="color_send_massage">#344652</color>
+    <color name="color_get_massage">#0A84FF</color>
+    <color name="purple_200">#BB86FC</color>
+    <color name="purple_500">#6200EE</color>
+    <color name="purple_700">#3700B3</color>
+    <color name="teal_200">#03DAC5</color>
+    <color name="teal_700">#018786</color>
+</resources>
