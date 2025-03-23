@@ -35,6 +35,5 @@ class CardAdapter(private var productList: List<Product>) :
         productList = newList
         notifyDataSetChanged()
 
-
     }
 }
