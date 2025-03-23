@@ -34,5 +34,7 @@ class CardAdapter(private var productList: List<Product>) :
     fun updateList(newList: List<Product>) {
         productList = newList
         notifyDataSetChanged()
+
+
     }
 }
