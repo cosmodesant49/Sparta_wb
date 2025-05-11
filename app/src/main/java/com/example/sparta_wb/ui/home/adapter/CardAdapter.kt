@@ -1,12 +1,16 @@
 package com.example.sparta_wb.ui.home.adapter
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sparta_wb.R
 import com.example.sparta_wb.data.remote.model.product.Product
 import com.example.sparta_wb.databinding.ItemProductBinding
+import androidx.fragment.app.Fragment
 
-class CardAdapter(private var productList: List<Product>) :
+class CardAdapter(private var productList: List<Product>, private val fragment: Fragment) :
     RecyclerView.Adapter<CardAdapter.ProductViewHolder>() {
 
     inner class ProductViewHolder(private val binding: ItemProductBinding) :
@@ -16,6 +20,13 @@ class CardAdapter(private var productList: List<Product>) :
             binding.productDescription.text = product.description
             binding.productPrice.text = "Цена: ${product.price}$"
             binding.productStock.text = "В наличии: ${product.stock} шт."
+            binding.llCard.setOnClickListener {
+                val bundle = Bundle().apply {
+                    putSerializable("product", product)
+                }
+                NavHostFragment.findNavController(fragment)
+                    .navigate(R.id.action_navigation_home_to_detailsFragment, bundle)
+            }
         }
     }
 
@@ -34,6 +45,5 @@ class CardAdapter(private var productList: List<Product>) :
     fun updateList(newList: List<Product>) {
         productList = newList
         notifyDataSetChanged()
-
     }
 }

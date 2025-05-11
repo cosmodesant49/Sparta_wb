@@ -34,7 +34,7 @@ class CardFragment : Fragment() {
 
     private fun setupRecyclerView() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = CardAdapter(emptyList())
+        adapter = CardAdapter(emptyList(), this)
         binding.recyclerView.adapter = adapter
     }
 
