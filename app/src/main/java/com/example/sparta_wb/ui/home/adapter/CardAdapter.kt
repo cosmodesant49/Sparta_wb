@@ -16,11 +16,47 @@ class CardAdapter(
     private val fragment: Fragment
 ) : RecyclerView.Adapter<CardAdapter.ProductViewHolder>() {
 
+    private var originalList: List<Product> = productList
+
+    fun updateOriginalList(newList: List<Product>) {
+        originalList = newList
+    }
+
+    fun filter(query: String?) {
+        val filteredList = if (query.isNullOrBlank()) {
+            originalList
+        } else {
+            originalList.filter {
+                it.title.contains(query, ignoreCase = true)
+            }
+        }
+        updateList(filteredList)
+    }
+
+    fun updateList(newList: List<Product>) {
+        productList = newList
+        notifyDataSetChanged()
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
+        val binding = ItemProductBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return ProductViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
+        holder.bind(productList[position])
+    }
+
+    override fun getItemCount(): Int = productList.size
+
     inner class ProductViewHolder(private val binding: ItemProductBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(product: Product) = with(binding) {
-            // Загрузка изображения
             val imageUrl = product.images.firstOrNull()
             if (imageUrl != null) {
                 Glide.with(root.context)
@@ -32,36 +68,18 @@ class CardAdapter(
                 bookImage.setImageResource(R.color.black)
             }
 
-            // Установка текста
             productTitle.text = product.title
             productPrice.text = "Цена: ${product.price}$"
             productStock.text = "В наличии: ${product.stock} шт."
 
-            // Навигация
-            llCard.setOnClickListener {
+            root.setOnClickListener {
                 val bundle = Bundle().apply {
                     putSerializable("product", product)
-                    putString("image_path", imageUrl)  // Передаем URL изображения
+                    putString("image_path", imageUrl)
                 }
                 NavHostFragment.findNavController(fragment)
                     .navigate(R.id.action_navigation_home_to_detailsFragment, bundle)
             }
         }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val binding = ItemProductBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ProductViewHolder(binding)
-    }
-
-    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        holder.bind(productList[position])
-    }
-
-    override fun getItemCount(): Int = productList.size
-
-    fun updateList(newList: List<Product>) {
-        productList = newList
-        notifyDataSetChanged()
     }
 }

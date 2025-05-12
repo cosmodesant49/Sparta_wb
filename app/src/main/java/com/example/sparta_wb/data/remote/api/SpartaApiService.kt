@@ -17,6 +17,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface SpartaApiService {
     @POST(SIGNUP)
@@ -36,4 +37,12 @@ interface SpartaApiService {
         @Header("Authorization") authHeader: String,
         @Body request: CreateOrderRequest
     ): Call<OrderResponse>
+
+    @GET("api/v1/products/")
+    fun searchProducts(
+        @Query("search") searchQuery: String?,
+        @Query("limit") limit: Int = 5000,
+        @Query("category") category: String? = null,
+        @Query("offset") offset: Int = 1
+    ): Call<ProductResponse>
 }

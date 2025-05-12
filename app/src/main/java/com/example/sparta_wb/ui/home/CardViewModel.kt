@@ -1,6 +1,5 @@
 package com.example.sparta_wb.ui.home
 
-
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,20 +18,36 @@ class ProductViewModel : ViewModel() {
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
+    private val _isEmpty = MutableLiveData<Boolean>()
+    val isEmpty: LiveData<Boolean> = _isEmpty
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     fun loadProducts() {
-        RetrofitClient.instance.getProducts().enqueue(object : Callback<ProductResponse> {
+        searchProducts(null)
+    }
+
+    fun searchProducts(query: String?) {
+        _isLoading.value = true
+
+        RetrofitClient.instance.searchProducts(query).enqueue(object : Callback<ProductResponse> {
             override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
+                _isLoading.value = false
+
                 if (response.isSuccessful) {
-                    _products.value = response.body()?.products
+                    val productList = response.body()?.products ?: emptyList()
+                    _products.value = productList
+                    _isEmpty.value = productList.isEmpty()
                 } else {
                     _error.value = "Ошибка: ${response.code()}"
                 }
             }
 
             override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
+                _isLoading.value = false
                 _error.value = "Ошибка сети: ${t.message}"
             }
         })
     }
-
 }
