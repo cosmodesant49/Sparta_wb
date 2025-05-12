@@ -18,7 +18,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -35,25 +34,21 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-
-
+        // Объединяем оба слушателя
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.loginFragment,
                 R.id.login_or_SignUpFragment,
+                R.id.detailsFragment,
                 R.id.registrationFragment -> {
+                    // Скрываем BottomNavigation и ActionBar
                     navView.visibility = View.GONE
                     supportActionBar?.hide()
                 }
-            }
-        }
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.navigation_home,
-                R.id.navigation_dashboard,
-                R.id.navigation_notifications -> {
+                else -> {
+                    // Показываем BottomNavigation и ActionBar
                     navView.visibility = View.VISIBLE
-                    supportActionBar?.hide()
+                    supportActionBar?.show()
                 }
             }
         }

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sparta_wb.data.remote.api.RetrofitClient
 import com.example.sparta_wb.data.remote.model.product.Product
+import com.example.sparta_wb.data.remote.model.product.ProductResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,18 +20,19 @@ class ProductViewModel : ViewModel() {
     val error: LiveData<String> = _error
 
     fun loadProducts() {
-        RetrofitClient.instance.getProducts().enqueue(object : Callback<List<Product>> {
-            override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
+        RetrofitClient.instance.getProducts().enqueue(object : Callback<ProductResponse> {
+            override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
                 if (response.isSuccessful) {
-                    _products.value = response.body()
+                    _products.value = response.body()?.products
                 } else {
                     _error.value = "Ошибка: ${response.code()}"
                 }
             }
 
-            override fun onFailure(call: Call<List<Product>>, t: Throwable) {
+            override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
                 _error.value = "Ошибка сети: ${t.message}"
             }
         })
     }
+
 }

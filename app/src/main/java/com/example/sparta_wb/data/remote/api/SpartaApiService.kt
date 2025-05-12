@@ -1,6 +1,7 @@
 package com.example.sparta_wb.data.remote.api
 
 import com.example.sparta_wb.data.remote.model.product.Product
+import com.example.sparta_wb.data.remote.model.product.ProductResponse
 import com.example.sparta_wb.data.remote.model.user.signIn.SigninRequest
 import com.example.sparta_wb.data.remote.model.user.signIn.SigninResponse
 import retrofit2.Call
@@ -21,4 +22,5 @@ interface SpartaApiService {
     fun signin(@Body request: SigninRequest): Call<SigninResponse>
 
     @GET(GETPRODUCT)
-    fun getProducts(): Call<List<Product>>}
+    fun getProducts(): Call<ProductResponse>
+}

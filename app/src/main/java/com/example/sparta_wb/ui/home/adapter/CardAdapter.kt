@@ -3,26 +3,45 @@ package com.example.sparta_wb.ui.home.adapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.sparta_wb.R
 import com.example.sparta_wb.data.remote.model.product.Product
 import com.example.sparta_wb.databinding.ItemProductBinding
-import androidx.fragment.app.Fragment
 
-class CardAdapter(private var productList: List<Product>, private val fragment: Fragment) :
-    RecyclerView.Adapter<CardAdapter.ProductViewHolder>() {
+class CardAdapter(
+    private var productList: List<Product>,
+    private val fragment: Fragment
+) : RecyclerView.Adapter<CardAdapter.ProductViewHolder>() {
 
     inner class ProductViewHolder(private val binding: ItemProductBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(product: Product) {
-            binding.productTitle.text = product.title
-            binding.productDescription.text = product.description
-            binding.productPrice.text = "Цена: ${product.price}$"
-            binding.productStock.text = "В наличии: ${product.stock} шт."
-            binding.llCard.setOnClickListener {
+
+        fun bind(product: Product) = with(binding) {
+            // Загрузка изображения
+            val imageUrl = product.images.firstOrNull()
+            if (imageUrl != null) {
+                Glide.with(root.context)
+                    .load(imageUrl)
+                    .placeholder(R.color.black)
+                    .error(R.color.black)
+                    .into(bookImage)
+            } else {
+                bookImage.setImageResource(R.color.black)
+            }
+
+            // Установка текста
+            productTitle.text = product.title
+            productPrice.text = "Цена: ${product.price}$"
+            productStock.text = "В наличии: ${product.stock} шт."
+
+            // Навигация
+            llCard.setOnClickListener {
                 val bundle = Bundle().apply {
                     putSerializable("product", product)
+                    putString("image_path", imageUrl)  // Передаем URL изображения
                 }
                 NavHostFragment.findNavController(fragment)
                     .navigate(R.id.action_navigation_home_to_detailsFragment, bundle)
@@ -31,8 +50,7 @@ class CardAdapter(private var productList: List<Product>, private val fragment: 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val binding =
-            ItemProductBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemProductBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ProductViewHolder(binding)
     }
 
