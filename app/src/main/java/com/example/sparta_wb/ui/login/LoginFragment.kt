@@ -13,6 +13,7 @@ import com.example.sparta_wb.R
 import com.example.sparta_wb.data.remote.api.RetrofitClient
 import com.example.sparta_wb.data.remote.model.user.signIn.SigninRequest
 import com.example.sparta_wb.databinding.FragmentLoginBinding
+import com.example.sparta_wb.utils.TokenManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -32,11 +33,11 @@ class LoginFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnLogIn.setOnClickListener { loginUser() }
     }
+
     private fun loginUser() {
         val email = binding.etLogIn.text.toString().trim()
         val password = binding.etPassword.text.toString().trim()
@@ -48,34 +49,39 @@ class LoginFragment : Fragment() {
 
         lifecycleScope.launch {
             try {
-                Log.d("RegistrationFragment", "запрос отправлен на бек $email")
+                Log.d("LoginFragment", "Запрос отправлен на сервер: $email")
                 val response = withContext(Dispatchers.IO) {
                     RetrofitClient.instance.signin(SigninRequest(email, password)).execute()
                 }
 
                 if (response.isSuccessful) {
-                    Log.d(
-                        "RegistrationFragment",
-                        "успешно ${response.body()?.message}"
-                    )
-                    findNavController().navigate(R.id.action_loginFragment_to_navigation_home)
+                    val signinResponse = response.body()
+                    signinResponse?.let {
+                        // Сохраняем токен
+                        TokenManager.saveAccessToken(requireContext(), it.accessToken)
+                        Log.d("LoginFragment", "Токен сохранен: ${it.accessToken}")
+
+                        // Переходим на главный экран
+                        findNavController().navigate(R.id.action_loginFragment_to_navigation_home)
+                    }
                 } else {
                     val errorMessage = response.errorBody()?.string()
-                    Log.e("RegistrationFragment", "Ошибка $errorMessage")
-                    showToast("Ошибка $errorMessage")
+                    Log.e("LoginFragment", "Ошибка: $errorMessage")
+                    showToast("Ошибка входа: ${errorMessage ?: "Неизвестная ошибка"}")
                 }
             } catch (e: IOException) {
-                Log.e("RegistrationFragment", "Ошибка сети ${e.message}", e)
+                Log.e("LoginFragment", "Ошибка сети: ${e.message}", e)
                 showToast("Ошибка сети. Проверьте соединение с интернетом")
             } catch (e: HttpException) {
-                Log.e("RegistrationFragment", "Ошибка бекенда ${e.message}", e)
-                showToast("Ошибка бекенда ${e.message}")
+                Log.e("LoginFragment", "Ошибка сервера: ${e.message}", e)
+                showToast("Ошибка сервера: ${e.message}")
             } catch (e: Exception) {
-                Log.e("RegistrationFragment", "Ошибка ${e.message}", e)
-                showToast("Произошла ошибка")
+                Log.e("LoginFragment", "Неожиданная ошибка: ${e.message}", e)
+                showToast("Произошла ошибка: ${e.message}")
             }
         }
     }
+
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }

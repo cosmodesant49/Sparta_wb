@@ -1,42 +1,59 @@
+// com/example/sparta_wb/ui/dashboard/adapter/DashboardAdapter.kt
 package com.example.sparta_wb.ui.dashboard.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.sparta_wb.data.remote.model.CartItem
-import com.example.sparta_wb.databinding.ItemProductBinding
+import com.example.sparta_wb.data.remote.model.Order
+import com.example.sparta_wb.databinding.ItemOrderBinding
+import java.text.SimpleDateFormat
+import java.util.*
 
-class DashboardAdapter(private val items: List<CartItem>) :
-    RecyclerView.Adapter<DashboardAdapter.CartViewHolder>() {
+class DashboardAdapter(private val orders: List<Order>) :
+    RecyclerView.Adapter<DashboardAdapter.OrderViewHolder>() {
 
-    inner class CartViewHolder(private val binding: ItemProductBinding) :
+    private val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+
+    inner class OrderViewHolder(private val binding: ItemOrderBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: CartItem) {
+        fun bind(order: Order) {
             with(binding) {
-                Glide.with(root)
-                    .load(item.imageUrl)
-                    .into(bookImage)
+                // Display order info
+                orderId.text = "Order #${order.id}"
+                orderDate.text = "Ordered on ${dateFormat.format(order.orderAt)}"
+                orderStatus.text = "Status: ${order.status.capitalize()}"
 
-                productTitle.text = item.title
-                bookAuthor.text = item.author
-                productPrice.text = "%.2f ₽".format(item.price)
-                productStock.text = "В наличии: ${item.stock} шт."
-                productDescription.text = item.description
+                // Display first product as the main image
+                order.products.firstOrNull()?.product?.images?.firstOrNull()?.let { imageUrl ->
+                    Glide.with(root)
+                        .load(imageUrl)
+                        .into(orderImage)
+                }
+
+                // Display product count
+                val itemCount = order.products.sumOf { it.product_quantity }
+                productCount.text = "$itemCount items"
+
+                // Display total price
+                val total = order.products.sumOf {
+                    it.product_unit_price.toDouble() * it.product_quantity
+                }
+                totalPrice.text = "$${"%.2f".format(total)}"
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemProductBinding.inflate(inflater, parent, false)
-        return CartViewHolder(binding)
+        val binding = ItemOrderBinding.inflate(inflater, parent, false)
+        return OrderViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
-        holder.bind(items[position])
+    override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
+        holder.bind(orders[position])
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = orders.size
 }
