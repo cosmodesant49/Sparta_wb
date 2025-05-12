@@ -48,6 +48,7 @@
 
         <!-- Поля ввода -->
         <EditText
+            android:textColor="@color/white"
             android:id="@+id/priceInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,6 +58,7 @@
             android:layout_marginBottom="12dp" />
 
         <EditText
+            android:textColor="@color/white"
             android:id="@+id/ratingInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -65,29 +67,14 @@
             android:textColorHint="#cccccc"
             android:layout_marginBottom="12dp" />
 
-        <EditText
-            android:id="@+id/category1Input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Категория 1 (номер)"
-            android:inputType="number"
-            android:textColorHint="#cccccc"
-            android:layout_marginBottom="12dp" />
+
 
         <EditText
-            android:id="@+id/category2Input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Категория 2 (номер)"
-            android:inputType="number"
-            android:textColorHint="#cccccc"
-            android:layout_marginBottom="12dp" />
-
-        <EditText
+            android:textColor="@color/white"
             android:id="@+id/votesInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Количество голосов"
+            android:hint="Количество оценок"
             android:inputType="number"
             android:textColorHint="#cccccc"
             android:layout_marginBottom="20dp" />

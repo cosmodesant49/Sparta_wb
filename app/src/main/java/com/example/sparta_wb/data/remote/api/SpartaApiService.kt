@@ -4,6 +4,8 @@ import com.example.sparta_wb.data.remote.model.Order
 import com.example.sparta_wb.data.remote.model.OrderResponse
 import com.example.sparta_wb.data.remote.model.product.Product
 import com.example.sparta_wb.data.remote.model.product.ProductResponse
+import com.example.sparta_wb.data.remote.model.user.liqid.LiquidityRequest
+import com.example.sparta_wb.data.remote.model.user.liqid.LiquidityResponse
 import com.example.sparta_wb.data.remote.model.user.orders.CreateOrderRequest
 import com.example.sparta_wb.data.remote.model.user.signIn.SigninRequest
 import com.example.sparta_wb.data.remote.model.user.signIn.SigninResponse
@@ -45,4 +47,8 @@ interface SpartaApiService {
         @Query("category") category: String? = null,
         @Query("offset") offset: Int = 1
     ): Call<ProductResponse>
+
+        @POST("api/v1/products/liquidity")
+        fun getLiquidityPrediction(@Body request: LiquidityRequest): Call<LiquidityResponse>
+
 }
