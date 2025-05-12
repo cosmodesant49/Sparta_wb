@@ -40,6 +40,12 @@ data class Product(
     val categoryUpdateAt: String,
     @SerializedName("category_addedById")
     val categoryAddedById: Long,
+    @SerializedName("product_isPopular")
+    val productIsPopular: Boolean,
+    @SerializedName("product_averageRating")
+    val productAverageRating: String,
+
+
 ): Serializable
 
 data class Category(

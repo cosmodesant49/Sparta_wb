@@ -2,6 +2,7 @@ package com.example.sparta_wb.ui.home.adapter
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
@@ -13,7 +14,8 @@ import com.example.sparta_wb.databinding.ItemProductBinding
 
 class CardAdapter(
     private var productList: List<Product>,
-    private val fragment: Fragment
+    private val fragment: Fragment,
+    private val isSubscribed: Boolean
 ) : RecyclerView.Adapter<CardAdapter.ProductViewHolder>() {
 
     private var originalList: List<Product> = productList
@@ -68,9 +70,22 @@ class CardAdapter(
                 bookImage.setImageResource(R.color.black)
             }
 
+            productRating.text = "Рейтинг: ${product.productAverageRating}"
             productTitle.text = product.title
             productPrice.text = "Цена: ${product.price}$"
             productStock.text = "В наличии: ${product.stock} шт."
+
+            // Показываем статус ликвидности только при активной подписке
+            if (isSubscribed) {
+                productStatusText.visibility = View.VISIBLE
+                productStatusText.text = if (product.productIsPopular) {
+                    "Товар ликвиден"
+                } else {
+                    "Товар не ликвиден"
+                }
+            } else {
+                productStatusText.visibility = View.GONE
+            }
 
             root.setOnClickListener {
                 val bundle = Bundle().apply {

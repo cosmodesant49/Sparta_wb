@@ -21,9 +21,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Полностью скрыть тулбар, если не используешь вообще
-        //supportActionBar?.hide()
-
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
 
@@ -34,21 +31,36 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_notifications
             )
         )
-        // Удаляем эту строку, чтобы ActionBar не подключался заново:
-        setupActionBarWithNavController(navController, appBarConfiguration)
 
+        // подключаем action bar
+        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
+                // Указываем фрагменты, где нужно скрыть нижнюю навигацию
                 R.id.loginFragment,
                 R.id.login_or_SignUpFragment,
                 R.id.detailsFragment,
                 R.id.registrationFragment -> {
                     navView.visibility = View.GONE
+                    supportActionBar?.hide()
                 }
+
+                // Добавь сюда фрагменты, где нужно скрыть только тулбар
+                R.id.login_or_SignUpFragment,
+                R.id.registrationFragment,
+                R.id.navigation_dashboard,
+                R.id.navigation_notifications,
+                R.id.detailsFragment,
+                R.id.loginFragment -> {
+                    navView.visibility = View.VISIBLE
+                    supportActionBar?.hide()
+                }
+
                 else -> {
                     navView.visibility = View.VISIBLE
+                    supportActionBar?.show()
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.example.sparta_wb.ui.home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -36,7 +37,10 @@ class CardFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        adapter = CardAdapter(emptyList(), this)
+        val sharedPreferences = requireContext().getSharedPreferences("user_preferences", Context.MODE_PRIVATE)
+        val isSubscribed = sharedPreferences.getBoolean("is_subscribed", false)
+
+        adapter = CardAdapter(emptyList(), this, isSubscribed)
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = this@CardFragment.adapter

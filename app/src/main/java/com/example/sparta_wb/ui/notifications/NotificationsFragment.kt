@@ -52,11 +52,11 @@ class NotificationsFragment : Fragment() {
             updateSubscriptionStatus(isChecked)
         }
 
+
         return root
     }
 
     private fun updateSubscriptionStatus(isSubscribed: Boolean) {
-        // Обновляем текст в зависимости от состояния подписки
         if (isSubscribed) {
             statusTextView.text = "Подписка активирована. Спасибо за покупку!"
         } else {
